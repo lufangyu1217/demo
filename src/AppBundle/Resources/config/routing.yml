@@ -1,0 +1,3 @@
+get:
+  path: /get
+  defaults: { _controller: AppBundle:Default:index }

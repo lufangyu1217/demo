@@ -1,0 +1,20 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/service_container.html
+parameters:
+    #parameter_name: value
+    demo_config:
+      demo_user: lufangyu
+      demo_password: 123456
+      demo_birth: 1217
+
+services:
+    demo:
+        class: Demo\Service\Common\DemoContainer
+        arguments: ["%demo_config%"]
+
+    app_asset_helper.twig_extension:
+            class: AppBundle\Twig\AssetHelperExtension
+            arguments:    ['@service_container']
+            public: false
+            tags:
+                - { name: twig.extension }
