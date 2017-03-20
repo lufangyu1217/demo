@@ -2,55 +2,78 @@
 namespace Demo\Service\Common;
 
 use Pimple\Container;
+use Demo\Service\Common\ContainerCall;
+use Doctrine\DBAL\DriverManager;
 
 class DemoContainer extends Container
 {
     protected $_instance;
 
-    protected $pool = array();
-
-    protected $configs;
+    private $config = array();
 
     public function __construct($demo_configs)
     {
         parent::__construct();
 
-        $this->configs = $demo_configs;
-    }
+        if (empty($this->config)) {
+            $this->config = $demo_configs;
+        }
 
-    public function boot($options = array())
-    {
+        $this['service'] = function($container) {
+            return function ($module, $name) use ($container) {
+                $class = "Demo\\Service\\{$module}\\Impl\\{$name}Impl";
+
+                return new $class($container);
+            };
+        };
+
+        $this['dao'] = function($container) {
+            return function ($module, $name) use ($container) {
+                $class = "Demo\\Service\\{$module}\\Dao\\Impl\\{$name}Impl";
+
+                return new $class($container);
+            };
+        };
+
+        $this['call'] = function($container) {
+            return new ContainerCall(
+                array(
+                    'service' => $container['service'],
+                    'dao'     => $container['dao']
+                )
+            );
+        };
+
+        $this['db'] = function ($container) {
+            $database_config = $container->config['database'];
+
+            return DriverManager::getConnection(array(
+                'dbname'       => $database_config['name'],
+                'user'         => $database_config['user'],
+                'password'     => $database_config['password'],
+                'host'         => $database_config['host'],
+                'driver'       => $database_config['driver'],
+                'charset'      => $database_config['charset']
+            ));
+        };
     }
 
     public function registerProviders()
     {
-        //TODO
     }
 
     public function createService($name)
     {
-        $class = explode(':', $name);
-
-        $module = $class[0];
-        $className = $class[1];
-
-        if (empty($this->pool[$className])) {
-            $class = "Demo\\Service\\{$module}\\Impl\\{$className}Impl";
-
-            $this->pool[$name] = new $class($this);
-        }
-
-        return $this->pool[$name];
+        return $this['call']->call($name, 'service');
     }
 
     public function createDao($name)
     {
-        if (empty($this->pool[$name])) {
-            $class = "Demo\\Service\\Dao\\Impl\\{$name}Impl";
-            
-            $this->pool[$name] = new $class($this);
-        }
+        return $this['call']->call($name, 'dao');
+    }
 
-        return $this->pool[$name];
+    private function getContainerCall()
+    {
+        return new ContainerCall();
     }
 }

@@ -1,7 +1,7 @@
 <?php 
 namespace Demo\Service\User\Dao;
 
-class UserDao
+interface UserDao
 {
-    
+    public function get();
 }
