@@ -1,7 +1,7 @@
 <?php 
 namespace Demo\Service\Common;
 
-class BaseService
+class BaseDao
 {
     private $demo_container;
 
@@ -10,8 +10,8 @@ class BaseService
         $this->demo_container = $demo_container;
     }
 
-    public function createDao($name)
+    public function db()
     {
-        return $this->demo_container->createDao($name);
+        return $this->demo_container['db'];
     }
 }

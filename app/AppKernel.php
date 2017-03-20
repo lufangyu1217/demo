@@ -58,7 +58,8 @@ class AppKernel extends Kernel
 
     protected function initDemoContainer()
     {
-        // $demo = $this->container->get('demo');
+        // $demo_container = $this->container->get('demo');
+        // $demo_container->boot();
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

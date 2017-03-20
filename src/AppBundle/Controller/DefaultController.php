@@ -9,9 +9,11 @@ class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $this->getUserService()->get();
+        $t = $this->getUserService()->get();
 
-        return $this->render('AppBundle::index.html.twig');
+        return $this->render('AppBundle::layout.html.twig', array(
+            't' => $t
+        ));
     }
 
     public function getUserService()

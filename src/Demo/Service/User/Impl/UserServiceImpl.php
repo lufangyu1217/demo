@@ -8,6 +8,11 @@ class UserServiceImpl extends BaseService implements UserService
 {
     public function get()
     {
-        echo "22";
+        return $this->getUserDao()->get();
+    }
+
+    protected function getUserDao()
+    {
+        return $this->createDao('User:UserDao');
     }
 }
