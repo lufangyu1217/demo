@@ -1,4 +1,107 @@
-{% for b in t %}
-  {{b.id}}
-{% endfor %}
-dwqdwq
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="{{ asset('bundles/app/bootstrap.min.css') }}">
+<link rel="stylesheet" type="text/css" href='{{ asset('bundles/app/css/index.css') }}'>
+</head>
+<body>
+<div class="header">
+  <p class="sum-copy">
+    总消费金额：
+  </p>    
+  <p class="bill">
+    ${{ total }}
+  </p>
+  <button class="write" data-toggle="modal" data-target="#myModal">记一笔</button>
+</div>
+
+<div class="container">
+  <div class="row">
+  {% for item in items %}
+    <div class="col-md-4">
+      <div class="box">
+        <div class="title">
+          <h4>{{ item.name }}</h4>
+          <div class="title-left">
+            <p class="asd">总消费：</p>
+            <p class="price-left">{{item.total}}</p>
+          </div>
+          <div class="title-right">
+            <p class="poo">超额消费：</p>
+            <p class="{% if item.less %}less{% else %}price-right{% endif %}">{% if item.less %}{{item.less}}{% else %}{{ item.redundant }}{% endif %}</p>
+          </div>
+        </div> 
+        <div id="{{ item.name }}" class="kkk">
+          {% for data,reason in item.items %}
+            <div class="item">
+              <div class="ni">
+              <div class="item-left">
+                <div class="tip"></div>
+                <p>{{reason}}</p>
+              </div>
+              <div class="item-right">
+                <p class="ppp">{{data}}</p>
+              </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  {% endfor %}
+  </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content qop">
+
+      <div class="modal-header ug">
+        <p class="haha-title">记一笔</p>
+      </div>
+
+      <div class="modal-body">
+        <form id="box-form">
+            <div class="form-group">
+                <input type="email" class="form-control cash" id="exampleInputEmail1" placeholder="输入金额" name="price">
+            </div>
+
+            <div class="form-group">
+                <input type="email" class="form-control cash" id="date-picker" placeholder="选择日期" name="date"> 
+            </div>
+
+            <textarea class="form-control why" rows="3" placeholder="在此添加消费备注" name="remark"></textarea>
+
+            <select class="form-control dota" name="people">
+              <option>criss</option>
+              <option>xiaozhu</option>
+              <option>lufangyu</option>
+            </select>
+
+              <div class="form-group">
+                <input type="email" class="form-control cash" id="exampleInputEmail1" placeholder="输入密码" name="password">
+              </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer ug">
+        <button type="button" class="btn ccancle" data-dismiss="modal">取消</button>
+        <button type="button" class="btn ook" data-url="{{ path('box') }}">确定</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+<!-- </div> -->
+
+</div>
+
+</body>
+<script type="text/javascript" src="{{ asset('bundles/app/js/common/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/app/js/common/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/app/js/common/bootstrap-datetimepicker.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/app/js/demo/index.js') }}"></script>
+</html>
