@@ -39,7 +39,6 @@ class DefaultController extends BaseController
         foreach ($items as $item) {
             $total += $item['total'];
         }
-// var_dump($this->getUserService()->get());exit;
         return $this->render('AppBundle::layout.html.twig', array(
             'items' => $this->getUserService()->get(),
             'total' => $total
